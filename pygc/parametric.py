@@ -5,6 +5,10 @@ import numpy as np
 import scipy.linalg
 from   .tools import *
 
+# Placeholder for akaike info creterion function
+def aic(p,m,N,SIG):
+    return 2*np.log(np.linalg.det( SIG )) + 2*p*p*m/N
+
 def YuleWalker(X, m, maxlags=100):
 	'''
 		Estimate the VAR model coefficients by solving the YW equations.

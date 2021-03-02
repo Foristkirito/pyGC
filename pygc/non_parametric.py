@@ -4,7 +4,7 @@
 import numpy             as     np 
 import matplotlib.pyplot as     plt 
 import scipy.io          as     scio
-from   .tools             import *
+from   .tools            import *
 
 def wilson_factorization(S, freq, fs, Niterations=100, tol=1e-12, verbose=True):
 	'''
@@ -23,9 +23,6 @@ def wilson_factorization(S, freq, fs, Niterations=100, tol=1e-12, verbose=True):
 		if(f_ind>0):
 			Sarr[:,:,2*N-f_ind] = S[:,:,f_ind].T
 		f_ind += 1
-	
-	#Sarr[:,:,0:N+1] = S[:,:,:].copy()
-	#Sarr[:,:,N+2:]  = S[:,:,::-1]
 
 	gam = np.zeros([m,m,2*N])
 
@@ -47,15 +44,13 @@ def wilson_factorization(S, freq, fs, Niterations=100, tol=1e-12, verbose=True):
 	for iteration in range(Niterations):
 
 		for i in range(Sarr.shape[2]):
-			# g(:,:,ind)=inv(psi(:,:,ind))*Sarr(:,:,ind)*inv(psi(:,:,ind))'+I;%'
 			g[:,:,i] = np.matmul(np.matmul(np.linalg.inv(psi[:,:,i]),Sarr[:,:,i]),np.conj(np.linalg.inv(psi[:,:,i])).T)+I
-			#g[:,:,i] = np.linalg.inv(psi[:,:,i])*Sarr[:,:,i]*np.conj(np.linalg.inv(psi[:,:,i]).T) + I
 
 		gp = PlusOperator(g, m, fs, freq)
 		psiold = psi.copy()
 		psierr = 0
 		for i in range(Sarr.shape[2]):
-			psi[:,:,i] =np.matmul(psi[:,:,i], gp[:,:,i])# psi[:,:,i]*gp[:,:,i] #
+			psi[:,:,i] =np.matmul(psi[:,:,i], gp[:,:,i])
 			psierr    += np.linalg.norm(psi[:,:,i]-psiold[:,:,i],1) / Sarr.shape[2]
 
 		if(psierr<tol):
@@ -63,7 +58,6 @@ def wilson_factorization(S, freq, fs, Niterations=100, tol=1e-12, verbose=True):
 
 		if verbose == True:
 			print('Err = ' + str(psierr))
-
 
 	Snew = np.zeros([m,m,N+1]) * (1 + 1j)
 
@@ -86,5 +80,3 @@ def wilson_factorization(S, freq, fs, Niterations=100, tol=1e-12, verbose=True):
 		Hnew[:,:,i] = np.matmul(psi[:,:,i], A0inv)
 
 	return Snew, Hnew, Znew
-
-import numpy as np

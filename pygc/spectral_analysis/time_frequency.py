@@ -4,11 +4,11 @@ import os
 import h5py
 import multiprocessing
 from   joblib           import Parallel, delayed
-from   ..misc            import smooth_spectra, downsample   
+from   ..misc           import smooth_spectra, downsample   
 
 def welch_spectrum(data = None, fs = 20, window='hann', nfft=None, scaling='density'):
     if scaling not in ['density', 'spectrum']:
-        raise ValueError('Method should be either "morlet" or "multitaper"')
+        raise ValueError('Method should be either "density" or "spectrum"')
     # Data dimension
     T,C,L=data.shape
     # Spectral matrix

@@ -1,2 +1,4 @@
 *.npy
+*.dat
+*.tar.gz
 __pycache__

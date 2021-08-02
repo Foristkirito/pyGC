@@ -1,2 +1,4 @@
 *.npy
 __pycache__
+.idea/
+__MACOSX/

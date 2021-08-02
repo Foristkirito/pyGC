@@ -1,0 +1,19 @@
+[[source]]
+name = "aliyun"
+url = "http://mirrors.aliyun.com/pypi/simple/"
+verify_ssl = false
+
+[dev-packages]
+
+[packages]
+numpy = "*"
+matplotlib = "*"
+scipy = "*"
+joblib = "*"
+neo = "*"
+elephant = "*"
+quantities = "*"
+mne = "*"
+
+[requires]
+python_version = "3.7"

@@ -16,8 +16,8 @@ import pygc.non_parametric
 import pygc.granger
 import plot_results 
 
-p = int(sys.argv[-1])
-
+p = 100
+plot_results.fig4()
 if p == 0:
 	# Generates figure 3 from the paper
 
@@ -35,10 +35,10 @@ if p == 0:
 	f = pygc.pySpec.compute_freq(N, Fs)
 
 	S = np.zeros([2,2,N//2+1]) + 1j*np.zeros([2,2,N//2+1])
-
+	print(S.shape)
 	print('Generating AR model time series...')
 	Z = ar_model_dhamala(N=N, Trials = Trials, C=C, Fs=Fs, t_start=0, t_stop=None, cov=cov)
-
+	print(Z.shape)
 	print('Estimating spectral matrix from ' + str(Trials) + ' trials...')
 	for i in range(Trials):
 		if i%500 == 0:
@@ -74,9 +74,10 @@ if p == 1:
 	f = pygc.pySpec.compute_freq(N, Fs)
 
 	S = np.zeros([2,2,N,N//2+1]) + 1j*np.zeros([2,2,N,N//2+1])
-
+	print(S.shape)
 	print('Generating AR model time series...')
 	Z = ar_model_dhamala(N=N, Trials = Trials, C=C, Fs=Fs, t_start=0, t_stop=2.25, cov=cov)
+	print(Z[0,0,:].shape)
 
 	print('Estimating wavelet matrix from ' + str(Trials) + ' trials...')
 	for i in range(Trials):
@@ -85,7 +86,6 @@ if p == 1:
 
 		Wx = pygc.pySpec.morlet(Z[0,i,:], f, Fs)
 		Wy = pygc.pySpec.morlet(Z[1,i,:], f, Fs)
-
 		S[0,0] += Wx*np.conj(Wx) / Trials
 		S[0,1] += Wx*np.conj(Wy) / Trials
 		S[1,0] += Wy*np.conj(Wx) / Trials
@@ -99,7 +99,7 @@ if p == 1:
 		Ix2y, Iy2x, Ixy  = pygc.granger.granger_causality(S[:,:,idx,:], Hnew, Znew) 
 		np.save('data/fig4_'+str(idx)+'.npy', {'f': f, 'Ix2y': Ix2y, 'Iy2x': Iy2x, 'Ixy': Ixy})
 
-	Parallel(n_jobs=40,	 backend='loky', max_nbytes=1e6)(delayed(save_granger)(S, idx) for idx in range(N))
+	Parallel(n_jobs=30,	 backend='loky', max_nbytes=1e6)(delayed(save_granger)(S, idx) for idx in range(N))
 	print('Plotting results...')
 	plot_results.fig4()
 

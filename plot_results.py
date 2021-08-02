@@ -54,7 +54,7 @@ def fig4():
 	Iy2x = np.zeros([N//2+1, N])
 
 	for i in range(N):
-		data = np.load('data/fig4_'+str(i)+'.npy').item()
+		data = np.load('data/fig4_'+str(i)+'.npy', allow_pickle=True).item()
 		f         = data['f']
 		Ix2y[:,i] = data['Ix2y']
 		Iy2x[:,i] = data['Iy2x']
@@ -79,7 +79,7 @@ def fig4():
 	plt.xlabel('time (sec)')
 	plt.title(r'Granger causality: $X_{1}\rightarrow X_{2}$')
 	plt.tight_layout()
-	plt.savefig('figures/fig2.pdf', dpi=600)
+	plt.savefig('figures/fig2.png', dpi=600)
 	plt.close()
 
 ######################################################################################################
